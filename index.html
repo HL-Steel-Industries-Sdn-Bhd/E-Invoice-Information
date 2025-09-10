@@ -82,12 +82,12 @@
       border-bottom: none;
     }
 
-    /* 列宽分配（可按需调整比例）*/
+    /* 列宽分配 */
     th:nth-child(1), td:nth-child(1) { width: 30%; }
     th:nth-child(2), td:nth-child(2) { width: 50%; }
     th:nth-child(3), td:nth-child(3) { width: 20%; text-align: center; }
 
-    /* 按钮样式（保留原样并小幅优化）*/
+    /* 按钮样式（修复换行问题）*/
     .copy-btn {
       border: 1px solid #0069d9;
       border-radius: 10px;
@@ -95,9 +95,10 @@
       color: #fff;
       box-shadow: 0 8px 16px rgba(0,123,255,0.35), inset 0 1px 0 rgba(255,255,255,0.3);
       cursor: pointer;
-      padding: 6px 14px;
+      padding: 6px 12px;
       transition: transform .06s ease, box-shadow .2s ease, filter .2s ease;
-      font-size: 14px;
+      font-size: 12px;       /* 缩小字体 */
+      white-space: nowrap;   /* 强制一行显示，避免 Co/py 换行 */
     }
 
     .copy-btn:hover {
@@ -117,7 +118,11 @@
 
     @media (max-width: 600px) {
       th, td { font-size: 13px; padding: 8px; }
-      .copy-btn { font-size: 12px; padding: 5px 10px; border-radius: 8px; }
+      .copy-btn {
+        font-size: 11px;     /* 手机端再缩小一点 */
+        padding: 4px 8px;
+        border-radius: 8px;
+      }
     }
   </style>
 </head>
@@ -288,5 +293,6 @@
   </script>
 </body>
 </html>
+
 
 
