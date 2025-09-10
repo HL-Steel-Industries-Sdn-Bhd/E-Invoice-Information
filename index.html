@@ -2,16 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- 禁止横移 + 禁止缩放 -->
+  <!-- 锁定页面宽度并禁止缩放（按你之前要求）-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>E Invoice Information</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
+    /* 全局 */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden; /* 禁止横向滚动 */
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y; /* 只允许纵向滑动 */
       background: #f8f9fa;
       color: #333;
-      overflow-x: hidden; /* 禁止横向滚动 */
+      font-family: Arial, sans-serif;
+    }
+
+    /* 页面容器与间距（手机缩小间距） */
+    .container {
+      margin: 40px;
+    }
+    @media (max-width: 600px) {
+      .container { margin: 12px; }
     }
 
     header {
@@ -21,6 +34,8 @@
 
     header img {
       max-height: 80px;
+      max-width: 100%;
+      height: auto;
     }
 
     h1 {
@@ -28,7 +43,11 @@
       font-size: 26px;
       color: #007BFF;
     }
+    @media (max-width: 600px) {
+      h1 { font-size: 18px; }
+    }
 
+    /* 表格：固定列宽，避免中间列撑大 */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -36,7 +55,8 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       border-radius: 8px;
       overflow: hidden;
-      table-layout: fixed; /* 固定布局避免挤 */
+      table-layout: fixed; /* 关键：平均/固定分配列宽，避免内容撑开 */
+      border: 1px solid #e6e9ee;
     }
 
     th, td {
@@ -44,170 +64,224 @@
       text-align: left;
       border-bottom: 1px solid #dee2e6;
       vertical-align: middle;
+
+      /* 自动换行，遇到很长单词也能断行 */
+      white-space: normal;
       word-wrap: break-word;
-      word-break: break-word;
+      overflow-wrap: anywhere;
+      box-sizing: border-box;
     }
 
     th {
       background: #007BFF;
       color: white;
+      font-weight: 600;
     }
 
     tr:last-child td {
       border-bottom: none;
     }
 
+    /* 列宽分配（可按需调整比例）*/
+    th:nth-child(1), td:nth-child(1) { width: 30%; }
+    th:nth-child(2), td:nth-child(2) { width: 50%; }
+    th:nth-child(3), td:nth-child(3) { width: 20%; text-align: center; }
+
+    /* 按钮样式（保留原样并小幅优化）*/
     .copy-btn {
       border: 1px solid #0069d9;
-      border-radius: 8px;
+      border-radius: 10px;
       background: linear-gradient(180deg, #4da3ff 0%, #007BFF 100%);
       color: #fff;
+      box-shadow: 0 8px 16px rgba(0,123,255,0.35), inset 0 1px 0 rgba(255,255,255,0.3);
       cursor: pointer;
-      padding: 4px 10px;
-      font-size: 12px; /* 改小字体避免换行 */
-      white-space: nowrap; /* 禁止按钮文字换行 */
+      padding: 6px 14px;
       transition: transform .06s ease, box-shadow .2s ease, filter .2s ease;
+      font-size: 14px;
     }
 
     .copy-btn:hover {
       filter: brightness(1.05);
+      box-shadow: 0 10px 20px rgba(0,123,255,0.45), inset 0 1px 0 rgba(255,255,255,0.35);
     }
 
     .copy-btn:active {
       transform: translateY(1px);
+      box-shadow: inset 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    .copy-btn:focus-visible {
+      outline: 3px solid #80bdff;
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 600px) {
+      th, td { font-size: 13px; padding: 8px; }
+      .copy-btn { font-size: 12px; padding: 5px 10px; border-radius: 8px; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="https://i.imgur.com/AbyTxH1.png" alt="Logo">
-    <h1>E Invoice Information</h1>
-  </header>
+  <div class="container">
+    <header>
+      <img src="https://i.imgur.com/AbyTxH1.png" alt="Logo">
+      <h1>E Invoice Information</h1>
+    </header>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Field</th>
-        <th>Data</th>
-        <th>Copy</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Company Name :</td>
-        <td>HL STEEL INDUSTRIES SDN BHD</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>Company Telephone Number :</td>
-        <td>+607-5859478</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>Company Address (Full) :</td>
-        <td>14, Jalan Teknologi Perintis 1/2, Taman Teknologi Nusajaya, 79250 Iskandar Puteri, Johor.</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>Address 1 :</td>
-        <td>14, Jalan Teknologi Perintis 1/2</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>Address 2 :</td>
-        <td>Taman Teknologi Nusajaya</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>Post Code :</td>
-        <td>79250</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>City :</td>
-        <td>Iskandar Puteri</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>State :</td>
-        <td>Johor</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-
-      <!-- 🔹 新增 E-Invoice Email Address row -->
-      <tr>
-        <td>E-Invoice Email Address :</td>
-        <td>account@hlsteel.my</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-
-      <tr>
-        <td>Company Registration No. :</td>
-        <td>200701042886(800919-U)</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>Company Registration No. (New) :</td>
-        <td>200701042886</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>Company Registration No. (Old) :</td>
-        <td>800919-U</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>SST Registration No. - Sales Tax (Manufacturer) :</td>
-        <td>J31-1808-21027057</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>SST Registration No. - Service Tax (Group L) :</td>
-        <td>J31-2508-32000716</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>Tax Identification Number (TIN) :</td>
-        <td>C20333142070</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>Tax Identification Number (TIN) :</td>
-        <td>20333142070</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>Malaysia Standard Industrial Classification (MSIC) Code :</td>
-        <td>25999</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>Malaysia Standard Industrial Classification (MSIC) Code :</td>
-        <td>47199</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>Malaysia Standard Industrial Classification (MSIC) Code :</td>
-        <td>82301</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-      <tr>
-        <td>Business Activity Description :</td>
-        <td>Engage in fabrication and trading of stainless steel product and equipment in construction site, trading and hiring of mobile truck, kitchen equipment, food kiosks, vending machine, to provide facilities to organize promotion or management of event.</td>
-        <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
-      </tr>
-    </tbody>
-  </table>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Data</th>
+          <th>Copy</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Company Name :</td>
+          <td>HL STEEL INDUSTRIES SDN BHD</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>Company Telephone Number :</td>
+          <td>+607-5859478</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>Company Address (Full) :</td>
+          <td>14, Jalan Teknologi Perintis 1/2, Taman Teknologi Nusajaya, 79250 Iskandar Puteri, Johor.</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>Address 1 :</td>
+          <td>14, Jalan Teknologi Perintis 1/2</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>Address 2 :</td>
+          <td>Taman Teknologi Nusajaya</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>Post Code :</td>
+          <td>79250</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>City :</td>
+          <td>Iskandar Puteri</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>State :</td>
+          <td>Johor</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>Company Registration No. :</td>
+          <td>200701042886(800919-U)</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>Company Registration No. (New) :</td>
+          <td>200701042886</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>Company Registration No. (Old) :</td>
+          <td>800919-U</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>SST Registration No. - Sales Tax (Manufacturer) :</td>
+          <td>J31-1808-21027057</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>SST Registration No. - Service Tax (Group L) :</td>
+          <td>J31-2508-32000716</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>Tax Identification Number (TIN) :</td>
+          <td>C20333142070</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>Tax Identification Number (TIN) :</td>
+          <td>20333142070</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>Malaysia Standard Industrial Classification (MSIC) Code :</td>
+          <td>25999</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>Malaysia Standard Industrial Classification (MSIC) Code :</td>
+          <td>47199</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>Malaysia Standard Industrial Classification (MSIC) Code :</td>
+          <td>82301</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+        <tr>
+          <td>Business Activity Description :</td>
+          <td>Engage in fabrication and trading of stainless steel product and equipment in construction site, trading and hiring of mobile truck, kitchen equipment, food kiosks, vending machine, to provide facilities to organize promotion or management of event.</td>
+          <td><button class="copy-btn" onclick="copyText(this)">Copy</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <script>
+    // 更稳定的复制函数：取所在行第2个单元格 (Data)，并提供 fallback
     function copyText(button) {
-      const text = button.parentElement.previousElementSibling.textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        button.textContent = "Copied!";
-        setTimeout(() => button.textContent = "Copy", 1500);
-      });
+      const tr = button.closest('tr');
+      const dataCell = tr ? tr.querySelector('td:nth-child(2)') : null;
+      const text = dataCell ? dataCell.textContent.trim() : '';
+      if (!text) return;
+
+      // 禁用按钮，避免重复点
+      const originalLabel = button.textContent;
+      button.disabled = true;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showCopied(button, originalLabel);
+        }).catch(() => {
+          fallbackCopy(text);
+          showCopied(button, originalLabel);
+        });
+      } else {
+        // 兼容旧浏览器的 fallback
+        fallbackCopy(text);
+        showCopied(button, originalLabel);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) { /* ignore */ }
+      document.body.removeChild(ta);
+    }
+
+    function showCopied(button, originalLabel) {
+      button.textContent = "Copied!";
+      setTimeout(() => {
+        button.textContent = originalLabel;
+        button.disabled = false;
+      }, 1400);
     }
   </script>
 </body>
 </html>
+
 
