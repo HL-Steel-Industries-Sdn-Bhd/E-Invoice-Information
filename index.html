@@ -96,7 +96,7 @@
       box-shadow: 0 8px 16px rgba(0,123,255,0.35), inset 0 1px 0 rgba(255,255,255,0.3);
       cursor: pointer;
       padding: 6px 12px;
-      transition: transform .06s ease, box-shadow .2s ease, filter .2s ease;
+      transition: transform .06s ease, box-shadow .2s ease, filter .2s ease, background .3s ease;
       font-size: 12px;       /* 缩小字体 */
       white-space: nowrap;   /* 强制一行显示，避免 Co/py 换行 */
     }
@@ -114,6 +114,13 @@
     .copy-btn:focus-visible {
       outline: 3px solid #80bdff;
       outline-offset: 2px;
+    }
+
+    /* Copied 状态（黄色按钮） */
+    .copy-btn.copied {
+      background: linear-gradient(180deg, #ffda6a 0%, #ffc107 100%);
+      border-color: #e0a800;
+      color: #333;
     }
 
     @media (max-width: 600px) {
@@ -254,7 +261,6 @@
       const text = dataCell ? dataCell.textContent.trim() : '';
       if (!text) return;
 
-      // 禁用按钮，避免重复点
       const originalLabel = button.textContent;
       button.disabled = true;
 
@@ -266,7 +272,6 @@
           showCopied(button, originalLabel);
         });
       } else {
-        // 兼容旧浏览器的 fallback
         fallbackCopy(text);
         showCopied(button, originalLabel);
       }
@@ -285,14 +290,17 @@
 
     function showCopied(button, originalLabel) {
       button.textContent = "Copied";
+      button.classList.add("copied");
       setTimeout(() => {
         button.textContent = originalLabel;
+        button.classList.remove("copied");
         button.disabled = false;
       }, 1400);
     }
   </script>
 </body>
 </html>
+
 
 
 
