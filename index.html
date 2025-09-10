@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- 锁定页面宽度并禁止缩放（按你之前要求）-->
+  <!-- 锁定页面宽度并禁止缩放 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>E Invoice Information</title>
   <style>
@@ -11,15 +11,14 @@
       height: 100%;
       margin: 0;
       padding: 0;
-      overflow-x: hidden; /* 禁止横向滚动 */
+      overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
-      touch-action: pan-y; /* 只允许纵向滑动 */
+      touch-action: pan-y;
       background: #f8f9fa;
       color: #333;
       font-family: Arial, sans-serif;
     }
 
-    /* 页面容器与间距（手机缩小间距） */
     .container {
       margin: 40px;
     }
@@ -47,7 +46,7 @@
       h1 { font-size: 18px; }
     }
 
-    /* 表格：固定列宽，避免中间列撑大 */
+    /* 表格 */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -55,7 +54,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       border-radius: 8px;
       overflow: hidden;
-      table-layout: fixed; /* 关键：平均/固定分配列宽，避免内容撑开 */
+      table-layout: fixed;
       border: 1px solid #e6e9ee;
     }
 
@@ -64,8 +63,6 @@
       text-align: left;
       border-bottom: 1px solid #dee2e6;
       vertical-align: middle;
-
-      /* 自动换行，遇到很长单词也能断行 */
       white-space: normal;
       word-wrap: break-word;
       overflow-wrap: anywhere;
@@ -82,12 +79,11 @@
       border-bottom: none;
     }
 
-    /* 列宽分配 */
     th:nth-child(1), td:nth-child(1) { width: 30%; }
     th:nth-child(2), td:nth-child(2) { width: 50%; }
     th:nth-child(3), td:nth-child(3) { width: 20%; text-align: center; }
 
-    /* 按钮样式（修复换行问题）*/
+    /* 按钮样式 */
     .copy-btn {
       border: 1px solid #0069d9;
       border-radius: 10px;
@@ -97,8 +93,9 @@
       cursor: pointer;
       padding: 6px 12px;
       transition: transform .06s ease, box-shadow .2s ease, filter .2s ease, background .3s ease;
-      font-size: 12px;       /* 缩小字体 */
-      white-space: nowrap;   /* 强制一行显示，避免 Co/py 换行 */
+      font-size: 12px;
+      white-space: nowrap;   /* 不换行 */
+      min-width: 70px;       /* 固定最小宽度，避免文字不同导致按钮大小变化 */
     }
 
     .copy-btn:hover {
@@ -116,19 +113,24 @@
       outline-offset: 2px;
     }
 
-    /* Copied 状态（黄色按钮） */
+    /* Copied 状态（黄色按钮，字体保持小） */
     .copy-btn.copied {
       background: linear-gradient(180deg, #ffda6a 0%, #ffc107 100%);
       border-color: #e0a800;
       color: #333;
+      font-size: 12px;
     }
 
     @media (max-width: 600px) {
       th, td { font-size: 13px; padding: 8px; }
       .copy-btn {
-        font-size: 11px;     /* 手机端再缩小一点 */
+        font-size: 11px;
         padding: 4px 8px;
         border-radius: 8px;
+        min-width: 64px;
+      }
+      .copy-btn.copied {
+        font-size: 11px;
       }
     }
   </style>
@@ -254,7 +256,6 @@
   </div>
 
   <script>
-    // 更稳定的复制函数：取所在行第2个单元格 (Data)，并提供 fallback
     function copyText(button) {
       const tr = button.closest('tr');
       const dataCell = tr ? tr.querySelector('td:nth-child(2)') : null;
@@ -284,7 +285,7 @@
       ta.style.left = '-9999px';
       document.body.appendChild(ta);
       ta.select();
-      try { document.execCommand('copy'); } catch (e) { /* ignore */ }
+      try { document.execCommand('copy'); } catch (e) { }
       document.body.removeChild(ta);
     }
 
@@ -295,11 +296,12 @@
         button.textContent = originalLabel;
         button.classList.remove("copied");
         button.disabled = false;
-      }, 1400);
+      }, 2000);
     }
   </script>
 </body>
 </html>
+
 
 
 
