@@ -99,6 +99,7 @@
       transition: transform .06s ease, box-shadow .2s ease, filter .2s ease, background .3s ease;
       font-size: 12px;       /* Copy 字体大小 */
       white-space: nowrap;   /* 强制一行显示 */
+      line-height: 1.2;
     }
 
     .copy-btn:hover {
@@ -116,12 +117,14 @@
       outline-offset: 2px;
     }
 
-    /* Copied 状态（黄色按钮，字比 Copy 小 1/1.2 倍） */
+    /* Copied 状态（黄色按钮，保持高度一致） */
     .copy-btn.copied {
       background: linear-gradient(180deg, #ffda6a 0%, #ffc107 100%);
       border-color: #e0a800;
       color: #333;
       font-size: calc(12px / 1.2); /* 缩小 1.2 倍 */
+      line-height: 1.2;            /* 保持与 Copy 一样的行高 */
+      padding: 6px 12px;           /* 保持与 Copy 一样的高度 */
     }
 
     @media (max-width: 600px) {
@@ -130,9 +133,12 @@
         font-size: 11px;     /* 手机端 Copy 字体大小 */
         padding: 4px 8px;
         border-radius: 8px;
+        line-height: 1.2;
       }
       .copy-btn.copied {
         font-size: calc(11px / 1.3); /* 手机端 Copied 也缩小 1.3 倍 */
+        line-height: 1.2;            /* 高度保持一致 */
+        padding: 4px 8px;
       }
     }
   </style>
